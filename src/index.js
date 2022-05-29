@@ -13,11 +13,19 @@ root.render(
       <Routes>
         <Route path="/" element={<Navigate to="/races" />} exact />
         <Route path="/races" element={<App />}>
+          <Route
+            index
+            element={
+              <main>
+                <h3>Select a category</h3>
+              </main>
+            }
+          />
           <Route path=":category" element={<Category />} />
           <Route
             path="*"
             element={
-              <main style={{ padding: '1rem' }}>
+              <main>
                 <p>There's nothing here!</p>
               </main>
             }

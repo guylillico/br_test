@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Link, Outlet } from 'react-router-dom'
 import { AppStyled, Header, Container, Row, Col } from './App.styled'
 
-// Services
-import API from 'services/api'
-
 const App = () => {
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [races, setRaces] = useState([])
 
   useEffect(() => {
-    API.get(`/racing/todaysracing`)
+    axios.get(`https://www.betright.com.au/api/racing/todaysracing`)
       .then((result) => {
-        console.log(result.data)
         setRaces(result.data)
-        setIsLoaded(true)
+        setLoading(false)
       })
       .catch((err) => {
         console.log(err)
-        setIsLoaded(true)
+        setLoading(false)
       })
   }, [])
 
@@ -33,18 +30,18 @@ const App = () => {
             <div className="inner">
               <nav>
                 <ul>
-                {Object.entries(races).map(([k, v], i) => (
-                  
-                  <li key={i}>
-                    <Link to={`/races/${k}`}>{k}</Link>
-                  </li>
-                ))}
+                  {Object.entries(races).map(([k, v], i) => (
+                    <li key={i}>
+                      <Link to={`/races/${k}`} data-testid={k}>{k}</Link>
+                    </li>
+                  ))}
                 </ul>
               </nav>
             </div>
           </Col>
           <Col className="main">
             <div className="inner">
+              {loading && <p>Fetching data</p>}
               <Outlet />
             </div>
           </Col>
